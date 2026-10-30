@@ -6,6 +6,8 @@ and minimize waiting time.
 
 Runs fully in the browser — React + TypeScript + Vite, no server.
 
+![Quanta screenshot](public/quanta.png)
+
 ## Algorithms
 
 | Algorithm                               | Type           | Extra input  |
