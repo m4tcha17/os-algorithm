@@ -63,7 +63,7 @@ export function AlgorithmSelector({
           <Input
             id="time-quantum"
             inputMode="numeric"
-            className="tabular-nums"
+            className="font-mono tabular-nums"
             aria-invalid={timeQuantumError ? true : undefined}
             value={timeQuantum}
             onChange={(event) => onTimeQuantumChange(event.target.value)}

@@ -29,7 +29,7 @@ function Field({ label, value, error, numeric, onChange }: FieldProps) {
         aria-label={label}
         aria-invalid={error ? true : undefined}
         inputMode={numeric ? "numeric" : undefined}
-        className={numeric ? "tabular-nums" : undefined}
+        className={numeric ? "font-mono tabular-nums" : undefined}
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />

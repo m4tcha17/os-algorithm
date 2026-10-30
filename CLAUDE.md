@@ -1,4 +1,4 @@
-# CLAUDE.md — CPU Scheduling Simulator
+# CLAUDE.md — Quanta (CPU Scheduling Simulator)
 
 Operating Systems presentation project. A browser-based simulator that shows how the
 short-term CPU scheduler picks processes from the ready queue and allocates the CPU, and
@@ -33,7 +33,7 @@ reports per-process and average Turnaround Time and Waiting Time.
 | UI components   | shadcn (`base-luma` style, `mist` base color) on Base UI (`@base-ui/react`) |
 | Variants / classes | `class-variance-authority`, `cn` (replaces clsx + tailwind-merge) |
 | Icons           | Remix Icon (`@remixicon/react`)                   |
-| Fonts           | Merriweather, Lora (`@fontsource-variable/*`)     |
+| Fonts           | Merriweather, Lora, Geist Mono (`@fontsource-variable/*`); Geist Mono for the main heading and all numbers |
 | Animations      | React Bits — optional, see Rule 4                 |
 | Package manager | npm                                               |
 
@@ -64,19 +64,37 @@ File uploads are read with the browser `FileReader` / `File.text()` API.
 - Algorithm selector, plus a Time Quantum field shown only for Round Robin.
 - Validation with clear inline error messages.
 - Preemptive / Non-preemptive badge under the algorithm selector.
-- "Run simulation" button: the simulation runs only on click (disabled while input is invalid).
-  Validation stays live. The process table starts empty.
+- "Run simulation" button: the simulation runs on click (disabled while input is invalid).
+  Validation stays live. The process table starts prefilled with the sample rows (P1–P5) and
+  FCFS is run once on load so the whole page is visible.
 - Links to the sample `.csv` / `.json` files under the upload button.
 
 **Output**
 
-- Gantt chart of the execution timeline, including CPU idle gaps (striped). Each bar shows its PID
-  and duration, with a hover tooltip; the card shows a badge with the algorithm that was run.
+- Gantt chart as process lanes: a CPU row (each bar shows its PID and duration, idle gaps striped),
+  then one lane per process where solid blocks are running time and hatched blocks are time waiting
+  in the ready queue (arrival to completion), with that process's WT at the end of the lane. Mono
+  time axis. Hover tooltips on every block; the section shows a badge with the algorithm that was run.
 - Process table: PID, Arrival, Burst, Completion Time (CT), Turnaround Time (TAT), Waiting Time (WT).
 - System averages: average TAT and average WT, each with its formula shown underneath.
-- Each process has a stable color (theme `--chart-1..5` tokens, categorical hues, cycled by input
-  order) shared by the Gantt chart and the process table.
-- Page header with title and a one-line subtitle; short descriptions under card titles.
+- Each process has a stable color by input position, shared by the Gantt chart and the process
+  table: P1–P5 use the theme `--chart-1..5` tokens; from the 6th process on, colors are generated
+  with the same lightness/chroma and golden-angle hue steps, skipping hues near the theme colors
+  and the coral primary.
+  Deterministic, never repeats.
+- Palette "Sandy Cobalt": warm sand background and neutrals (no pure white), soft coral primary,
+  desaturated process colors.
+- Page header with title "Quanta" (Geist Mono) and a one-line subtitle; short descriptions under section titles.
+- Each section has a small numbered mono label above its title: 01–03 "Input", 04–06 "Output".
+- Single page, stacked rows: input row (left: Algorithm + Run, then Import; right: Processes),
+  then Process Table | System Averages, then Gantt chart full width. Flat panels; 1px hairlines between
+  rows only (no column dividers, no outer frame), no cards.
+- No rounded corners anywhere (`--radius: 0`).
+- Results table headers in small uppercase Geist Mono; numeric columns right-aligned, `tabular-nums`.
+- Footer below the main grid (separate): "Quanta — Operating Systems" on the left,
+  "© 2026 University of San Carlos" on the right.
+- Before the first run, only the hint "Click “Run simulation” to see the schedule." is shown
+  (nothing while input is invalid).
 
 **Formulas (single source of truth: `src/lib/metrics.ts`)**
 
@@ -244,7 +262,7 @@ os-algorithm/
         │   ├── GanttChart.tsx         # timeline bars + time markers, idle shown
         │   ├── ResultsTable.tsx       # per-process CT / TAT / WT
         │   ├── AveragesSummary.tsx    # average TAT / WT
-        │   └── processColors.ts       # pid -> chart color class (shared by chart + table)
+        │   └── processColors.ts       # input position -> process color (shared by chart + table)
         ├── layout/
         │   └── Section.tsx            # shared card/section wrapper
         └── ui/                        # shadcn-generated primitives (button.tsx, ...)

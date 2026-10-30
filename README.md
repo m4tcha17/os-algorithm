@@ -1,4 +1,4 @@
-# CPU Scheduling Simulator
+# Quanta — CPU Scheduling Simulator
 
 An Operating Systems presentation project that simulates the **short-term CPU scheduler**:
 how it selects processes from the ready queue and allocates the CPU to maximize utilization
