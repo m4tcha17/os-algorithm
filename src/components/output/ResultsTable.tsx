@@ -31,11 +31,19 @@ export function ResultsTable({ rows }: ResultsTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {/* Empty state before the first run. */}
+        {rows.length === 0 && (
+          <TableRow className="hover:bg-transparent">
+            <TableCell colSpan={COLUMNS.length + 1} className="py-8 text-center text-sm text-muted-foreground">
+              No results yet.
+            </TableCell>
+          </TableRow>
+        )}
         {rows.map((row, index) => (
           <TableRow key={row.pid}>
             <TableCell className="font-mono bold">
               <span className="flex items-center gap-2">
-                <span className="size-2.5" style={{ backgroundColor: processColor(index) }} />
+                <span className="size-2.5 rounded-full" style={{ backgroundColor: processColor(index) }} />
                 {row.pid}
               </span>
             </TableCell>

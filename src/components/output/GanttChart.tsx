@@ -40,6 +40,20 @@ function waitingBlocks(row: ProcessMetrics, runs: Block[]): Block[] {
 }
 
 export function GanttChart({ segments, rows }: GanttChartProps) {
+  // Empty state before the first run: an empty CPU row and a hint.
+  if (segments.length === 0) {
+    return (
+      <div className="flex flex-col gap-3 font-mono">
+        <div className={ROW_CLASS}>
+          <span className="text-xs font-semibold">CPU</span>
+          <div className="h-12 border border-dashed" />
+          <span />
+        </div>
+        <p className="text-center font-serif text-sm text-muted-foreground">Run a simulation to see the schedule.</p>
+      </div>
+    );
+  }
+
   const totalTime = segments.length > 0 ? segments[segments.length - 1].end : 0;
   // One faint gridline per time unit behind every lane.
   const gridStyle: CSSProperties = {
@@ -89,7 +103,7 @@ export function GanttChart({ segments, rows }: GanttChartProps) {
           return (
             <div key={row.pid} className={ROW_CLASS}>
               <span className="flex items-center gap-2 text-xs font-semibold">
-                <span className="size-2.5" style={{ backgroundColor: color }} />
+                <span className="size-2.5 rounded-full" style={{ backgroundColor: color }} />
                 {row.pid}
               </span>
               <div className="relative h-6" style={gridStyle}>

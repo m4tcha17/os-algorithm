@@ -34,7 +34,7 @@ reports per-process and average Turnaround Time and Waiting Time.
 | Variants / classes | `class-variance-authority`, `cn` (replaces clsx + tailwind-merge) |
 | Icons           | Remix Icon (`@remixicon/react`)                   |
 | Fonts           | Merriweather, Lora, Geist Mono (`@fontsource-variable/*`); Geist Mono for the main heading and all numbers |
-| Animations      | React Bits — optional, see Rule 4                 |
+| Animations      | React Bits — optional, see Rule 4; `gsap` + `@gsap/react` (required by React Bits SplitText, approved) |
 | Package manager | npm                                               |
 
 Path alias: `@/*` -> `src/*` (set in `tsconfig.json`, `tsconfig.app.json`, `vite.config.ts`).
@@ -64,9 +64,11 @@ File uploads are read with the browser `FileReader` / `File.text()` API.
 - Algorithm selector, plus a Time Quantum field shown only for Round Robin.
 - Validation with clear inline error messages.
 - Preemptive / Non-preemptive badge under the algorithm selector.
-- "Run simulation" button: the simulation runs on click (disabled while input is invalid).
-  Validation stays live. The process table starts prefilled with the sample rows (P1–P5) and
-  FCFS is run once on load so the whole page is visible.
+- "Run simulation" button: the simulation runs on click. Clean start: one process row (PID "P1", other fields blank)
+  (grey placeholders), FCFS selected, Time Quantum blank, nothing run on load.
+  Validation stays live, but an error only shows once its field is edited; clicking Run with
+  invalid input reveals every error (Run is then disabled until the input is valid). Rows loaded
+  from a file show their errors immediately.
 - Links to the sample `.csv` / `.json` files under the upload button.
 
 **Output**
@@ -89,12 +91,12 @@ File uploads are read with the browser `FileReader` / `File.text()` API.
 - Single page, stacked rows: input row (left: Algorithm + Run, then Import; right: Processes),
   then Process Table | System Averages, then Gantt chart full width. Flat panels; 1px hairlines between
   rows only (no column dividers, no outer frame), no cards.
-- No rounded corners anywhere (`--radius: 0`).
+- No rounded corners anywhere (`--radius: 0`), except the process color dots (circles) in the table and Gantt lanes.
 - Results table headers in small uppercase Geist Mono; numeric columns right-aligned, `tabular-nums`.
 - Footer below the main grid (separate): "Quanta — Operating Systems" on the left,
   "© 2026 University of San Carlos" on the right.
-- Before the first run, only the hint "Click “Run simulation” to see the schedule." is shown
-  (nothing while input is invalid).
+- Before the first run, the output panels render empty: table headers with "No results yet.",
+  averages "—" with formulas, and an empty CPU row with "Run a simulation to see the schedule."
 
 **Formulas (single source of truth: `src/lib/metrics.ts`)**
 
@@ -263,6 +265,12 @@ os-algorithm/
         │   ├── ResultsTable.tsx       # per-process CT / TAT / WT
         │   ├── AveragesSummary.tsx    # average TAT / WT
         │   └── processColors.ts       # input position -> process color (shared by chart + table)
+        ├── animation/
+        │   ├── LetterGlitch.tsx       # React Bits glitch placeholder in the output area while "thinking"
+        │   ├── LatticeLoader.tsx      # React Bits loader beside Run simulation (random delay; tune MIN/MAX_THINKING_DELAY_MS in useSimulator.ts as you like)
+        │   ├── Magnet.tsx             # React Bits magnet hover (Run simulation, Add process)
+        │   ├── SplitText.tsx          # React Bits word rise-in on load: subtitle, section titles + descriptions
+        │   └── VariableProximity.tsx  # React Bits cursor-proximity weight effect on the "Quanta" h1
         ├── layout/
         │   └── Section.tsx            # shared card/section wrapper
         └── ui/                        # shadcn-generated primitives (button.tsx, ...)

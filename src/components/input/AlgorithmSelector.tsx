@@ -66,6 +66,7 @@ export function AlgorithmSelector({
             className="font-mono tabular-nums"
             aria-invalid={timeQuantumError ? true : undefined}
             value={timeQuantum}
+            placeholder="2"
             onChange={(event) => onTimeQuantumChange(event.target.value)}
           />
           {timeQuantumError && <p className="px-3 text-xs text-destructive">{timeQuantumError}</p>}

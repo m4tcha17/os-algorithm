@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import SplitText from "@/components/animation/SplitText";
 
 interface SectionProps {
   label?: string; // small numbered eyebrow above the title, e.g. "01 — Input"
@@ -19,8 +20,19 @@ export function Section({ label, title, description, action, className, children
           {label && (
             <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase">{label}</span>
           )}
-          <h2 className="font-heading text-lg font-semibold">{title}</h2>
-          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+          {/* Title and plain-text description rise in word by word when the section mounts. */}
+          <h2 className="font-heading text-lg font-semibold">
+            <SplitText text={title} className="align-top" tag="span" splitType="words" effect="rise" trigger="load" textAlign="left" />
+          </h2>
+          {description && (
+            <p className="text-sm text-muted-foreground">
+              {typeof description === "string" ? (
+                <SplitText text={description} className="align-top" tag="span" splitType="words" effect="rise" trigger="load" textAlign="left" />
+              ) : (
+                description
+              )}
+            </p>
+          )}
         </div>
         {action}
       </header>

@@ -23,6 +23,7 @@
     --accent: oklch(0.88 0.02 80);
     --accent-foreground: oklch(0.22 0.012 70);
     --destructive: oklch(0.577 0.245 27.325);
+    --remove: oklch(0.665 0.137 39.6);
     --border: oklch(0.83 0.025 78);
     --input: oklch(0.83 0.025 78);
     --ring: oklch(0.6 0.03 75);
@@ -58,6 +59,7 @@
     --accent: oklch(0.275 0.011 216.9);
     --accent-foreground: oklch(0.987 0.002 197.1);
     --destructive: oklch(0.704 0.191 22.216);
+    --remove: oklch(0.665 0.137 39.6);
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.56 0.021 213.5);
@@ -97,6 +99,7 @@
     --color-input: var(--input);
     --color-border: var(--border);
     --color-destructive: var(--destructive);
+    --color-remove: var(--remove);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
@@ -126,6 +129,10 @@
     }
   body {
     @apply bg-background text-foreground;
+    }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
     }
   html {
     @apply font-serif;

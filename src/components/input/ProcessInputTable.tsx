@@ -1,4 +1,5 @@
-import { RiAddLine, RiDeleteBinLine } from "@remixicon/react";
+import { RiAddLine, RiCloseLine } from "@remixicon/react";
+import Magnet from "@/components/animation/Magnet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -19,10 +20,11 @@ interface FieldProps {
   value: string;
   error?: string;
   numeric?: boolean;
+  placeholder?: string;
   onChange: (value: string) => void;
 }
 
-function Field({ label, value, error, numeric, onChange }: FieldProps) {
+function Field({ label, value, error, numeric, placeholder, onChange }: FieldProps) {
   return (
     <div className="flex flex-col gap-1">
       <Input
@@ -31,6 +33,7 @@ function Field({ label, value, error, numeric, onChange }: FieldProps) {
         inputMode={numeric ? "numeric" : undefined}
         className={numeric ? "font-mono tabular-nums" : undefined}
         value={value}
+        placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
       />
       {error && <p className="px-3 text-xs text-destructive">{error}</p>}
@@ -44,24 +47,37 @@ export function ProcessInputTable({ drafts, rowErrors, formError, onAdd, onChang
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-9 px-0">
+              <span className="sr-only">Remove</span>
+            </TableHead>
             <TableHead>Process ID</TableHead>
             <TableHead>Arrival Time</TableHead>
             <TableHead>Burst Time</TableHead>
-            <TableHead className="w-10">
-              <span className="sr-only">Remove</span>
-            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {drafts.map((draft) => {
+          {drafts.map((draft, index) => {
             const errors = rowErrors[draft.id] ?? {};
             return (
-              <TableRow key={draft.id} className="align-top hover:bg-transparent">
+              <TableRow key={draft.id} className="group align-top hover:bg-transparent">
+                <TableCell className="px-0">
+                  {/* Shown only while the mouse is over the row (or the button has keyboard focus); always shown on touch */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Delete ${draft.pid || "row"}`}
+                    className="text-muted-foreground opacity-0 group-hover:opacity-100 focus-visible:opacity-100 hover:text-remove [@media(hover:none)]:opacity-100"
+                    onClick={() => onRemove(draft.id)}
+                  >
+                    <RiCloseLine />
+                  </Button>
+                </TableCell>
                 <TableCell>
                   <Field
                     label="Process ID"
                     value={draft.pid}
                     error={errors.pid}
+                    placeholder={`P${index + 1}`}
                     onChange={(value) => onChange(draft.id, "pid", value)}
                   />
                 </TableCell>
@@ -71,6 +87,7 @@ export function ProcessInputTable({ drafts, rowErrors, formError, onAdd, onChang
                     value={draft.arrival}
                     error={errors.arrival}
                     numeric
+                    placeholder="0"
                     onChange={(value) => onChange(draft.id, "arrival", value)}
                   />
                 </TableCell>
@@ -80,18 +97,9 @@ export function ProcessInputTable({ drafts, rowErrors, formError, onAdd, onChang
                     value={draft.burst}
                     error={errors.burst}
                     numeric
+                    placeholder="5"
                     onChange={(value) => onChange(draft.id, "burst", value)}
                   />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={`Remove ${draft.pid || "row"}`}
-                    onClick={() => onRemove(draft.id)}
-                  >
-                    <RiDeleteBinLine />
-                  </Button>
                 </TableCell>
               </TableRow>
             );
@@ -101,10 +109,12 @@ export function ProcessInputTable({ drafts, rowErrors, formError, onAdd, onChang
 
       {formError && <p className="text-sm text-destructive">{formError}</p>}
 
-      <Button variant="outline" className="self-start" onClick={onAdd}>
-        <RiAddLine data-icon="inline-start" />
-        Add process
-      </Button>
+      <Magnet wrapperClassName="self-start" innerClassName="flex" padding={0} magnetStrength={8} maxOffset={4}>
+        <Button variant="outline" onClick={onAdd}>
+          <RiAddLine data-icon="inline-start" />
+          Add process
+        </Button>
+      </Magnet>
     </div>
   );
 }
