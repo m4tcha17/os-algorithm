@@ -15,7 +15,11 @@ reports per-process and average Turnaround Time and Waiting Time.
    `npx shadcn@latest add @react-bits/<Component>`. React Bits is **optional**: only add it once
    the core simulator is finished and time allows. Tailwind + shadcn are already set up; the
    `@react-bits` registry still has to be added to `components.json` first.
-5. Ask the user to review developed code after changes that were not approved by the user beforehand.
+5. Do not make any decision without consulting the user beforehand. Anything this file does not
+   explicitly specify (layout, visual style, behavior, wording, default data, extra files, token or
+   config changes, deleting files) must be listed and approved by the user before it is implemented.
+6. Strictly follow the scope. Do not add anything outside of it, however small, unless the user
+   approved it first.
 
 ## Stack
 
@@ -59,12 +63,20 @@ File uploads are read with the browser `FileReader` / `File.text()` API.
 - File upload: `.csv` or `.json` with the same three fields (formats below).
 - Algorithm selector, plus a Time Quantum field shown only for Round Robin.
 - Validation with clear inline error messages.
+- Preemptive / Non-preemptive badge under the algorithm selector.
+- "Run simulation" button: the simulation runs only on click (disabled while input is invalid).
+  Validation stays live. The process table starts empty.
+- Links to the sample `.csv` / `.json` files under the upload button.
 
 **Output**
 
-- Gantt chart of the execution timeline, including CPU idle gaps.
+- Gantt chart of the execution timeline, including CPU idle gaps (striped). Each bar shows its PID
+  and duration, with a hover tooltip; the card shows a badge with the algorithm that was run.
 - Process table: PID, Arrival, Burst, Completion Time (CT), Turnaround Time (TAT), Waiting Time (WT).
-- System averages: average TAT and average WT.
+- System averages: average TAT and average WT, each with its formula shown underneath.
+- Each process has a stable color (theme `--chart-1..5` tokens, categorical hues, cycled by input
+  order) shared by the Gantt chart and the process table.
+- Page header with title and a one-line subtitle; short descriptions under card titles.
 
 **Formulas (single source of truth: `src/lib/metrics.ts`)**
 
@@ -207,7 +219,6 @@ os-algorithm/
     ├── main.tsx                  # React entry
     ├── App.tsx                   # page layout; wires input -> useSimulator -> output
     ├── index.css                 # Tailwind + shadcn theme tokens (light/dark), fonts
-    ├── App.css                   # leftover Vite template styles (remove when App.tsx is rebuilt)
     ├── types/
     │   ├── process.ts            # Process
     │   └── schedule.ts           # AlgorithmId, SchedulerOptions, GanttSegment, Schedule, metrics types
@@ -232,7 +243,8 @@ os-algorithm/
         ├── output/
         │   ├── GanttChart.tsx         # timeline bars + time markers, idle shown
         │   ├── ResultsTable.tsx       # per-process CT / TAT / WT
-        │   └── AveragesSummary.tsx    # average TAT / WT
+        │   ├── AveragesSummary.tsx    # average TAT / WT
+        │   └── processColors.ts       # pid -> chart color class (shared by chart + table)
         ├── layout/
         │   └── Section.tsx            # shared card/section wrapper
         └── ui/                        # shadcn-generated primitives (button.tsx, ...)
