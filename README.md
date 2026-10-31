@@ -6,7 +6,7 @@ and minimize waiting time.
 
 Runs fully in the browser — React + TypeScript + Vite, no server.
 
-![Quanta screenshot](public/quanta.png)
+![Quanta screenshot](public/quanta-v2.png)
 
 ## Algorithms
 
