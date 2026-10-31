@@ -269,8 +269,7 @@ os-algorithm/
         │   ├── LetterGlitch.tsx       # React Bits glitch placeholder in the output area while "thinking"
         │   ├── LatticeLoader.tsx      # React Bits loader beside Run simulation (random delay; tune MIN/MAX_THINKING_DELAY_MS in useSimulator.ts as you like)
         │   ├── Magnet.tsx             # React Bits magnet hover (Run simulation, Add process)
-        │   ├── SplitText.tsx          # React Bits word rise-in on load: subtitle, section titles + descriptions
-        │   └── VariableProximity.tsx  # React Bits cursor-proximity weight effect on the "Quanta" h1
+        │   └── SplitText.tsx          # React Bits word rise-in on load: subtitle, section titles + descriptions
         ├── layout/
         │   └── Section.tsx            # shared card/section wrapper
         └── ui/                        # shadcn-generated primitives (button.tsx, ...)

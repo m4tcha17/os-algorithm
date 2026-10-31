@@ -4,7 +4,6 @@ import LatticeLoader from "@/components/animation/LatticeLoader";
 import LetterGlitch from "@/components/animation/LetterGlitch";
 import Magnet from "@/components/animation/Magnet";
 import SplitText from "@/components/animation/SplitText";
-import VariableProximity from "@/components/animation/VariableProximity";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "@/components/layout/Section";
@@ -48,19 +47,19 @@ function App() {
       <div className="mx-auto flex max-w-7xl flex-col px-4 py-10 sm:px-6">
         <header className={cn("flex flex-col gap-2 px-6 py-8", REVEAL)}>
           <h1 className="font-mono text-4xl font-semibold tracking-tight">
-            {/* Letters near the cursor swell from semibold (600) to black (900); Geist Mono only has a weight axis. */}
-            <VariableProximity
-              label="Quanta"
-              fromFontVariationSettings="'wght' 600"
-              toFontVariationSettings="'wght' 900"
-              radius={100}
-              falloff="linear"
-              style={{ fontFamily: "inherit" }}
+            <SplitText
+              text="Quanta"
+              className="align-top"
+              tag="span"
+              splitType="words"
+              effect="rise"
+              trigger="load"
+              textAlign="left"
             />
           </h1>
           <p className="text-sm text-muted-foreground">
             <SplitText
-              text="Enter processes, pick a scheduling algorithm, and see the order the CPU runs them in."
+              text="A simple CPU scheduling simulator that shows a visual gantt chart, visual table, and system averages for quick calculation of how algorithms like FCFS, SJF, SRTF, and Round Robin work in the CPU"
               className="align-top"
               tag="span"
               splitType="words"
