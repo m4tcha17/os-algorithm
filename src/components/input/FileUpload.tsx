@@ -39,16 +39,21 @@ export function FileUpload({ onLoad }: FileUploadProps) {
       {status.kind === "loaded" && <p className="text-xs text-muted-foreground">{status.message}</p>}
       {status.kind === "error" && <p className="text-xs text-destructive">{status.message}</p>}
 
-      <p className="text-xs text-muted-foreground">
-        Columns: <code className="font-mono">pid, arrival, burst</code>. Samples:{" "}
-        <a className="text-primary underline-offset-4 hover:underline" href="/samples/sample-processes.csv" download>
-          CSV
-        </a>{" "}
-        ·{" "}
-        <a className="text-primary underline-offset-4 hover:underline" href="/samples/sample-processes.json" download>
-          JSON
-        </a>
-      </p>
+      <div className="flex justify-between">
+        <p className="text-xs text-muted-foreground">
+          Columns: <code className="font-mono">pid, arrival, burst</code>.
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Sample Files:{" "}
+          <a className="text-primary underline-offset-4 hover:underline" href="/samples/sample-processes.csv" download>
+            CSV
+          </a>{" "}
+          ·{" "}
+          <a className="text-primary underline-offset-4 hover:underline" href="/samples/sample-processes.json" download>
+            JSON
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
